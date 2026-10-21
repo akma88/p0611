@@ -1,0 +1,45 @@
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter/material.dart';
+import 'package:p0611/api/weather_api.dart';
+import 'package:p0611/screens/weather_forecast.dart';
+
+class LocationScreen extends StatefulWidget {
+  @override
+  _LocationScreenState createState() => _LocationScreenState();
+}
+
+class _LocationScreenState extends State<LocationScreen> {
+  void getLocationData() async {
+    try {
+      var weatherInfo = await WeatherApi().fetchWeatherForecast(
+        city: '',
+        isCity: false,
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return WeatherForecastScreen(locationWeather: weatherInfo);
+          },
+        ),
+      );
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocationData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: SpinKitDoubleBounce(color: Colors.black87, size: 100.0),
+      ),
+    );
+  }
+}
